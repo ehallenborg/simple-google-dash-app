@@ -26,11 +26,12 @@ class Google:
 
     def add_row(self):
         # score, users = data
-        new_data = daily.get_current_score()
+        new_data = ['MAL']
+        new_data = new_data + daily.get_current_score()
         today = datetime.date.today().strftime("%m/%d/%Y")
         new_data.append(today)
 
-        new_df = pd.Series(new_data, index=['Score', 'Users', 'Date'])
+        new_df = pd.Series(new_data, index=['Source', 'Score', 'Users', 'Date'])
         dataframe = self.get_data()
         dataframe = dataframe.append(new_df, ignore_index=True)
         
@@ -40,5 +41,6 @@ class Google:
 
         print('updated sheet')
 
-# g = Google()
-# g.add_row()
+def run(event, context):
+    g = Google()
+    g.add_row()
