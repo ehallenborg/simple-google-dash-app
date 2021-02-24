@@ -12,6 +12,9 @@ APPS_NAME = 'Promised Neverland Season 2'
 g = Google()
 df = g.get_data()
 df['Date'] = pd.to_datetime(df['Date'])
+df_table = df.copy()
+df_table['Date'] = df_table['Date'].dt.strftime('%m/%d/%Y')
+df_table = df_table.drop(columns=['Source'])
 
 
 dropdown_menu = dcc.Dropdown(id='data-input-' + APPS_NAME,
@@ -21,8 +24,14 @@ dropdown_menu = dcc.Dropdown(id='data-input-' + APPS_NAME,
 
 table = dash_table.DataTable(
     id='table',
-    columns=[{"name": i, "id": i} for i in df.columns],
-    data=df.to_dict('records'),
+    columns=[{"name": i, "id": i} for i in df_table.columns],
+    style_cell={'textAlign': 'center'},
+    style_header={
+        'backgroundColor': 'rgb(230, 230, 230)',
+        'fontWeight': 'bold'
+    },
+    style_as_list_view=True,
+    data=df_table.to_dict('records'),
 )
 
 layout = template.template(APPS_NAME, dropdown_menu=dropdown_menu, table=table)
